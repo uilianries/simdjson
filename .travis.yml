@@ -23,7 +23,6 @@ conan-linux: &conan-linux
 conan-osx: &conan-osx
     os: osx
     language: generic
-    if: tag IS present
     install:
       - ./conan/travis/install.sh
     script:
