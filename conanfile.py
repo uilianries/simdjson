@@ -38,6 +38,8 @@ class SimdjsonConan(ConanFile):
                 (self.settings.compiler == "Visual Studio" and compiler_version < "15") or \
                 (self.settings.compiler == "apple-clang" and compiler_version < "9.0"):
                 raise ConanInvalidConfiguration("simdjson requires C++17")
+            elif (self.settings.os != "Windows" and self.settings.arch == "x86"):
+                raise ConanInvalidConfiguration("simdjson does not support 32-bits")
 
     def _configure_cmake(self):
         cmake = CMake(self)
