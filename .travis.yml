@@ -8,12 +8,52 @@ addons:
       - gcc-7
       - g++-7
 
+conan-linux: &conan-linux
+    os: linux
+    dist: xenial
+    language: python
+    python: "3.7"
+    services:
+      - docker
+    install:
+      - ./conan/travis/install.sh
+    script:
+      - ./conan/travis/build.sh
+
+conan-osx: &conan-osx
+    os: osx
+    language: generic
+    install:
+      - ./conan/travis/install.sh
+    script:
+      - ./conan/travis/build.sh
+
+matrix:
+  include:
+  - <<: *conan-linux
+    env: CONAN_GCC_VERSIONS=7 CONAN_DOCKER_IMAGE=conanio/gcc7 CONAN_ARCHS=x86_64
+  - <<: *conan-linux
+    env: CONAN_GCC_VERSIONS=8 CONAN_DOCKER_IMAGE=conanio/gcc8 CONAN_ARCHS=x86_64
+  - <<: *conan-linux
+    env: CONAN_CLANG_VERSIONS=6.0 CONAN_DOCKER_IMAGE=conanio/clang60 CONAN_ARCHS=x86_64
+  - <<: *conan-linux
+    env: CONAN_CLANG_VERSIONS=7.0 CONAN_DOCKER_IMAGE=conanio/clang7 CONAN_ARCHS=x86_64
+  - <<: *conan-osx
+    osx_image: xcode9
+    env: CONAN_APPLE_CLANG_VERSIONS=9.0
+  - <<: *conan-osx
+    osx_image: xcode9.4
+    env: CONAN_APPLE_CLANG_VERSIONS=9.1
+  - <<: *conan-osx
+    osx_image: xcode10.1
+    env: CONAN_APPLE_CLANG_VERSIONS=10.0
+
 branches:
   only:
     - master
 
-script: 
+script:
    - export CXX=g++-7
    - export CC=gcc-7
    - make
-   - make test 
+   - make test
