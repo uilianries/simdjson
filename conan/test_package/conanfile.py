@@ -11,10 +11,6 @@ class TestPackageConan(ConanFile):
     def build(self):
         cmake = CMake(self)
         cmake.definitions["SIMDJSON_HEADER_ONLY"] = self.options["simdjson"].header_only
-        if self.settings.compiler == "Visual Studio":
-            cmake.definitions["CONAN_CXX_FLAGS"] = "/arch:AVX2"
-        else:
-            cmake.definitions["CONAN_CXX_FLAGS"] = "-mavx2 -mbmi -mbmi2 -mpclmul"
         cmake.configure()
         cmake.build()
 

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
 from conans import ConanFile, CMake, tools
@@ -78,3 +77,7 @@ class SimdjsonConan(ConanFile):
             self.cpp_info.libs = tools.collect_libs(self)
             if self.settings.os == "Linux":
                 self.cpp_info.libs.append("m")
+        if tools.os_info.is_windows:
+            self.cpp_info.cxxflags.append("/arch:AVX2")
+        else:
+            self.cpp_info.cxxflags.extend(["-mavx2", "-mbmi", "-mbmi2", "-mpclmul"])
